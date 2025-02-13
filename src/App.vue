@@ -27,7 +27,7 @@
     },
     methods: {
       add () {
-        let id = this.lists.lenght + 1;
+        let id = this.lists.length + 1;
         if (this.newText.length < 1) {
           alert ('Заполните поле') 
         } else {
@@ -36,7 +36,20 @@
             text: this.newText
           })
         }
+      },
+      change(id, text) {
+        this.lists = this.lists.map(list => 
+        list.id === id ? {...list, text} : list
+        )
+      },
+      remove(id) {
+        this.lists = this.lists.filter(list => {
+          if (list.id !== id) {
+            return list
+          }
+        })
       }
+      
     }
   }
 </script>
@@ -45,11 +58,16 @@
   <Header/>
   <div class="main_block container">
     <div>
+
+      <input type="text" placeholder="Найти...">
+
       <List
       v-for="list in lists"
       :key="list.id"
       :id="list.id"
       :text="list.text"
+      @change="change"
+      @remove="remove"
       />
     </div>
     <div class="new_item">
@@ -72,7 +90,7 @@ body {
   .main_block {
     display: flex;
     gap: 20px;
-    margin: 20px 0;
+    margin: 20px auto;
   }
 
   .new_item-item {
@@ -91,9 +109,7 @@ body {
     cursor: pointer; /* Указываем, что это кнопка */
     transition: color 0.3s; /* Плавный переход цвета */
   }
-.kk{
-  
-}
+
   .button-save {
     background: rgb(1, 44, 184);
     color: white;
@@ -111,7 +127,7 @@ body {
     opacity: 1;
   } 
 
-  textarea {
+  textarea, input {
     border: none; /* Убирает рамку */
     background: rgb(255, 255, 255); /* Убирает фон */
     padding: 5px 10px; /* Убирает внутренние отступы */
@@ -127,5 +143,6 @@ body {
 textarea:focus {
     border: 2px solid rgb(225, 234, 253); /* Пример стиля при фокусе */ 
 }
+
   
 </style>

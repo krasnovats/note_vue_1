@@ -17,21 +17,25 @@ import IconRemove from '@/assets/icons/IconRemove.vue';
                 required: true
             },
 
+        },
+        data () {
+            return {
+                editText: this.text,
+            }
         }
     }
 </script>
 
 <template>
     <div class="list">
-        <p>{{ id }}</p>
-        <div><textarea name="" id="">{{ text }}</textarea></div>
+        <p class="list-id">{{ id }}</p>
+        <div><textarea v-model="editText" @keyup.enter="$emit('change', id, editText)">{{ text }}</textarea></div>
         <button class="button-ready">
            <IconCheck/> 
          </button>
-        <button class="button-remove">
+        <button @click="$emit('remove', id)" class="button-remove">
             <IconRemove/>
-        </button>
-  
+        </button> 
     </div>
 </template>
 
@@ -49,5 +53,9 @@ import IconRemove from '@/assets/icons/IconRemove.vue';
 
 .button-remove {
     color: brown;
+}
+
+.list-id {
+     font-weight: bold;
 }
 </style>
