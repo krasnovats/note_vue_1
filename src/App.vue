@@ -27,15 +27,20 @@
     },
     methods: {
       add () {
-        let id = this.lists.lenght + 1;
+        let id = this.lists.length + 1;
         if (this.newText.length < 1) {
           alert ('Заполните поле') 
         } else {
           this.lists.push({
-            id,
+            id: id,
             text: this.newText
           })
         }
+      },
+      remove (id) {
+        this.lists = this.lists.filter(list => {
+          return list.id !== id;
+        })
       }
     }
   }
@@ -50,6 +55,7 @@
       :key="list.id"
       :id="list.id"
       :text="list.text"
+      @remove="remove"
       />
     </div>
     <div class="new_item">
@@ -92,7 +98,7 @@ body {
     transition: color 0.3s; /* Плавный переход цвета */
   }
 .kk{
-  
+
 }
   .button-save {
     background: rgb(1, 44, 184);

@@ -28,7 +28,7 @@ import IconRemove from '@/assets/icons/IconRemove.vue';
         <button class="button-ready">
            <IconCheck/> 
          </button>
-        <button class="button-remove">
+        <button @click="$emit('remove', id)" class="button-remove">
             <IconRemove/>
         </button>
   
