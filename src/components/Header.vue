@@ -8,6 +8,7 @@ export default {
     methods: {
         toggleMenu () {
             this.isActive = !this.isActive;
+            this.$emit('toggle-style');
         }
     }
 }

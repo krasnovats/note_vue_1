@@ -1,14 +1,13 @@
 <script>
   import List from './components/List.vue'
   import Header from './components/Header.vue'
-
+  import Search  from './components/Search.vue';
 
   export default {
-    components: {
-      
+    components: {   
       List,
-      Header
-   
+      Header,
+      Search,
     },
     data () {
       return {
@@ -23,6 +22,8 @@
           },
         ],
         newText: '',
+        backgroundColor: '',
+        isNewStyle: false, 
       }
     },
     methods: {
@@ -38,46 +39,53 @@
         }
       },
       remove (id) {
-        this.lists = this.lists.filter(list => {
-          return list.id !== id;
+        this.lists = this.lists.filter(list => list.id !== id);
+        this.updateId();
+      },
 
-      change(id, text) {
+      updateId () {
+        this.lists = this.lists.map((list, index)=> {
+          return {...list, id: index + 1};
+        })
+      },
+
+      change (id, text) {
         this.lists = this.lists.map(list => 
         list.id === id ? {...list, text} : list
         )
       },
-      remove(id) {
-        this.lists = this.lists.filter(list => {
-          if (list.id !== id) {
-            return list
-          }
-
-        })
+      toggleStyle () {
+        this.isNewStyle = !this.isNewStyle;
+      } 
+      },
+      computed: {
+      styleClass() {
+        return this.isNewStyle ? 'new-style' : 'default-style'; // Определяем класс стиля в зависимости от состояния
       }
-      
-    }
+    },
   }
 </script>
 
 <template>
-  <Header/>
+  <Header
+  @toggle-style="toggleStyle"
+  />
   <div class="main_block container">
-    <div>
 
-      <input type="text" placeholder="Найти...">
+  <div :class="styleClass" class="items-box">
+    <Search />
 
-      <List
-      v-for="list in lists"
-      :key="list.id"
-      :id="list.id"
-      :text="list.text"
-HEAD
+    <List
+        v-for="list in lists"
+        :key="list.id"
+        :id="list.id"
+        :text="list.text"
+        :currentStyle="styleClass"
+        @change="change"
+        @remove="remove"
+        />
+  </div>
 
-      @change="change"
-
-      @remove="remove"
-      />
-    </div>
     <div class="new_item">
       <h2>Введите новую задачу</h2>
       <div class="new_item-item">
@@ -95,18 +103,21 @@ HEAD
 body {
   background: #f7f7f7;
 }
+
+h2 {
+  margin-bottom: 20px;
+}
   .main_block {
-    display: flex;
-    gap: 20px;
-    margin: 20px auto;
+   position: relative;
+   padding-top: 80px;
   }
 
   .new_item-item {
-    margin-top: 20px;
+    margin-top: 20px 0;
   }
 
   .new_item-item-text{
-    width: 400px;
+    width: 600px;
     height: 200px;
     margin-bottom: 20px;
   }
@@ -117,11 +128,6 @@ body {
     cursor: pointer; /* Указываем, что это кнопка */
     transition: color 0.3s; /* Плавный переход цвета */
   }
-
-.kk{
-
-}
-
 
   .button-save {
     background: rgb(1, 44, 184);
@@ -156,6 +162,26 @@ body {
 textarea:focus {
     border: 2px solid rgb(225, 234, 253); /* Пример стиля при фокусе */ 
 }
-
   
+
+.items-box {
+  position: absolute;
+  width: 600px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  
+}
+
+
+.new-style {
+  transition: all 0.8s;
+  transform: translateX(0%);
+}
+
+.default-style {
+  transition: all 0.8s;
+  transform: translateX(-200%);
+  
+}
 </style>

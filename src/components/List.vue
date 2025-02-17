@@ -1,11 +1,13 @@
 <script>
 import IconCheck from '@/assets/icons/IconCheck.vue';
 import IconRemove from '@/assets/icons/IconRemove.vue';
+import IconSearch from '@/assets/icons/IconSearch.vue';
 
     export default {
         components: {
            IconCheck, 
            IconRemove,
+           IconSearch,
         },
         props: {
             id: {
@@ -17,20 +19,30 @@ import IconRemove from '@/assets/icons/IconRemove.vue';
                 required: true
             },
 
+     
         },
         data () {
             return {
                 editText: this.text,
+                isReady: false,
+            }
+        },
+        methods: {
+            ready () {
+                this.isReady = !this.isReady;
             }
         }
     }
 </script>
 
 <template>
-    <div class="list">
+
+<div class="list">
+
+
         <p class="list-id">{{ id }}</p>
-        <div><textarea v-model="editText" @keyup.enter="$emit('change', id, editText)">{{ text }}</textarea></div>
-        <button class="button-ready">
+        <div><textarea v-model="editText" :style="{textDecoration:  isReady ?'line-through' : 'none'}"  @keyup.enter="$emit('change', id, editText)">{{ text }}</textarea></div>
+        <button class="button-ready" @click="ready">
            <IconCheck/> 
          </button>
         <button @click="$emit('remove', id)" class="button-remove">
@@ -45,6 +57,7 @@ import IconRemove from '@/assets/icons/IconRemove.vue';
     padding-bottom: 20px;
     margin: 20px 0;
     border-bottom: 1px solid gray;
+  
 }
 
 .button-ready {
@@ -58,4 +71,7 @@ import IconRemove from '@/assets/icons/IconRemove.vue';
 .list-id {
      font-weight: bold;
 }
+
+
+
 </style>
