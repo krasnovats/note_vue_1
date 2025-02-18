@@ -7,7 +7,17 @@ import IconSearch from '@/assets/icons/IconSearch.vue';
 
            IconSearch,
         },
-        
+
+        data () {
+            return {
+                searchText: '',
+            }
+        },
+        methods: {
+            onSearch() {
+                this.$emit('search', this.searchText);
+                },
+}      
     }
 </script>
 
@@ -16,8 +26,12 @@ import IconSearch from '@/assets/icons/IconSearch.vue';
 
 <template>
     <div class="search_box">
-        <IconSearch class="search-icon" @click="search"/>
-        <input v-model="searchQuery" class="input-search" type="text" placeholder="Найти..." @keyup.enter="search">
+        <IconSearch class="search-icon"/>
+        <input 
+            v-model="searchText" 
+            @input="onSearch" class="input-search" 
+            type="text" 
+            placeholder="Найти..." />
     </div>
 </template>
 

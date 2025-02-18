@@ -24,6 +24,7 @@
         newText: '',
         backgroundColor: '',
         isNewStyle: false, 
+        searchTerm: '',
       }
     },
     methods: {
@@ -56,13 +57,22 @@
       },
       toggleStyle () {
         this.isNewStyle = !this.isNewStyle;
-      } 
       },
+      handleSearch(searchTerm) {
+      this.searchTerm = searchTerm; // Обновляем строку поиска
+      },
+    },
       computed: {
       styleClass() {
         return this.isNewStyle ? 'new-style' : 'default-style'; // Определяем класс стиля в зависимости от состояния
-      }
+      },
+      filteredLists() {
+      return this.lists.filter(list =>
+        list.text.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
     },
+    },
+
   }
 </script>
 
@@ -73,14 +83,14 @@
   <div class="main_block container">
 
   <div :class="styleClass" class="items-box">
-    <Search />
+    <Search 
+    @search="handleSearch" />
 
     <List
-        v-for="list in lists"
+        v-for="list in filteredLists"
         :key="list.id"
         :id="list.id"
         :text="list.text"
-        :currentStyle="styleClass"
         @change="change"
         @remove="remove"
         />
@@ -157,6 +167,7 @@ h2 {
     resize: none; /* Убирает возможность изменения размера текстового поля */
     outline: rgb(1, 36, 153);
     box-shadow: none; /* Убирает тень (если есть) */
+    width: 100%;
 }
 
 textarea:focus {
